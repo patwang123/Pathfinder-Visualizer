@@ -3,6 +3,7 @@ import React from 'react';
 import './visualizer.css';
 import Node from './node/node.jsx';
 import a_star from './algorithms/Astar.jsx';
+import djikstras from './algorithms/Djikstras.jsx';
 import {ROWS, COLS,
         START_ROW,START_COL,
         FINISH_ROW,FINISH_COL,new_node}
@@ -33,7 +34,6 @@ class Dropdown extends React.Component {
 }*/
 
 
-
 export default class Visualizer extends React.Component {
     constructor(props){
         super(props)
@@ -42,11 +42,16 @@ export default class Visualizer extends React.Component {
             mouse_press: false
         }
     }
+    /*
+    Initiates nodes in grid on startup
+    */
     componentDidMount() {
         
         this.setState({nodes: initiate_nodes()});
     }
-
+    /*
+    Handles to toggle mouse press for selecting wall tiles
+    */
     handleMouseDown(row,col) {
         this.setState({nodes: new_wall(this.state.nodes,row,col),mouse_press: true})
     }
@@ -58,38 +63,71 @@ export default class Visualizer extends React.Component {
             this.setState({nodes: new_wall(this.state.nodes,row,col)})
         }
     }
+
     render() {
         const {nodes} = this.state
         return (
-            <div className='grid'>
-                {nodes.map((row,row_idx) => {
-                    return <div key={row_idx}>
-                        {row.map((node,node_idx) => {
-                            const {row,col,is_start,is_finish,is_wall,searched} = node;
-                            return (
-                            <Node 
-                                key={node_idx}
-                                row={row}
-                                col={col}
-                                is_start = {is_start}
-                                is_finish = {is_finish}
-                                is_wall = {is_wall}
-                                searched = {searched}
-                                onMouseDown={(row, col) => this.handleMouseDown(row, col)}
-                                onMouseEnter={(row, col) => this.handleMouseEnter(row, col)}
-                                onMouseUp={(row,col) => this.handleMouseUp(row,col)}
-                                >
-                            </Node>)
-                            })
-                        }
-                    </div>
+            <div>
+                <button onClick={ () => this.pathfind()}>Start it up!</button>
+                <div className='grid'>
+                    {nodes.map((row,row_idx) => {
+                        return <div key={row_idx}>
+                            {row.map((node,node_idx) => {
+                                const {row,col,is_start,is_finish,is_wall,searched} = node;
+                                return (
+                                <Node 
+                                    key={node_idx}
+                                    row={row}
+                                    col={col}
+                                    is_start = {is_start}
+                                    is_finish = {is_finish}
+                                    is_wall = {is_wall}
+                                    searched = {searched}
+                                    onMouseDown={(row, col) => this.handleMouseDown(row, col)}
+                                    onMouseEnter={(row, col) => this.handleMouseEnter(row, col)}
+                                    onMouseUp={(row,col) => this.handleMouseUp(row,col)}
+                                    >
+                                </Node>)
+                                })
+                            }
+                        </div>
 
-                })}
+                    })}
+                </div>
             </div>
         )
     }
+    /*
+    Main pathfind function
+    will start up a certain pathfinding algorithm based on dropdown selection, but has not been implemented yet
+    */
+    pathfind() {
+        const {nodes} = this.state;
+        const start = nodes[START_ROW][START_COL];
+        const end = nodes[FINISH_ROW][FINISH_COL];
+        const visited = a_star(nodes,start,end);
+        this.animate_visited(visited);
+        console.log(nodes);
+        const path = this.get_shortest_path();
+        console.log(path);
+        this.animate_shortest_path(path);
+    }
+    animate_visited(visited) {
 
+    }
+    animate_shortest_path(path) {
 
+    }
+    get_shortest_path = () => {
+        const {nodes} = this.state;
+        const res = [];
+        var last = nodes[FINISH_ROW][FINISH_COL];
+        while (last.previous !== null) {
+            res.unshift(last);
+            last = last.previous;
+        }
+        return res;
+    }
 }
 
 const initiate_nodes = () => {
@@ -118,16 +156,5 @@ const new_wall = (grid,row,col) => {
     const res = grid.slice();
     const node = res[row][col];
     res[row][col] = {...node,is_wall: !node.is_wall};
-    return res;
-}
-
-Array.prototype.get_shortest_path = () => {
-    const self = this;
-    const res = [];
-    var last = self[FINISH_ROW][FINISH_COL]
-    while (last.previous !== null) {
-        res.unshift(last);
-        last = last.previous;
-    }
     return res;
 }

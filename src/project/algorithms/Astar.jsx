@@ -1,3 +1,3 @@
-export function a_star(grid,start,end) {
+export default function a_star(grid,start,end) {
     const visited = [];
 }
