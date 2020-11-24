@@ -4,7 +4,7 @@ This is a visualizer based off of Javascript, CSS, and the React library to visu
 
 It's a work in progress, but feel free to check out how it's going at https://patwang123.github.io/Pathfinding-Visualizer/!
 
-# STATUS
+# Status
 
 As of now, the general interface has been implemented (selecting walls, start node, end node), but the algorithms have not been implemented yet.
 
