@@ -1,0 +1,38 @@
+.node {
+    width: 20px;
+    height: 20px;
+    outline: 1px solid black;
+    display: inline-block
+}
+
+.node-start {
+    background-color: rgba(0,255,0);
+}
+.node-finish {
+    background-color: rgba(0,0,255);
+}
+.node-shortest-path {
+    background-color: rgba(100,100,100);
+}
+.node-searched {
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+    animation-name: searching;
+    animation-duration: 2s;
+    animation-delay: 0;
+
+}
+
+@keyframes searching {
+    0% {
+        transform: scale(0.3);
+        background-color: rgba(0,0,0);
+    }
+    50% {
+        background-color: rgba(120,0,0);
+    }
+    100% {
+        transform: scale(1);
+        background-color: rgba(255,192,203);
+    }
+}
