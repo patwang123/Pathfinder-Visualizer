@@ -38,16 +38,15 @@ export default class Visualizer extends React.Component {
     constructor(props){
         super(props)
         this.state= {
-            nodes: [],
-            mouse_press: false
+            nodes: initiate_nodes(),
+            mouse_press: false,
+            reset_id: 0,
+            pathfinding: false
         }
     }
-    /*
-    Initiates nodes in grid on startup
-    */
     componentDidMount() {
-        
-        this.setState({nodes: initiate_nodes()});
+        const nodes = initiate_nodes();
+        this.setState({nodes: nodes, mouse_press: false,count: 0})
     }
     /*
     Handles to toggle mouse press for selecting wall tiles
@@ -64,25 +63,36 @@ export default class Visualizer extends React.Component {
         }
     }
 
+    reset() {
+        const {reset_id,pathfinding} = this.state
+        if(pathfinding) {
+            /*do stuff*/
+            return
+        }
+        this.setState({nodes: initiate_nodes(),reset_id: reset_id+1});
+    }
     render() {
-        const {nodes} = this.state
+        const {nodes,reset_id} = this.state
         return (
             <div>
                 <button onClick={ () => this.pathfind()}>Start it up!</button>
+                <br/>
+                <button onClick = { () => this.reset()}>Reset the board</button>
                 <div className='grid'>
                     {nodes.map((row,row_idx) => {
                         return <div key={row_idx}>
                             {row.map((node,node_idx) => {
-                                const {row,col,is_start,is_finish,is_wall,searched} = node;
+                                const {row,col,is_start,is_finish,is_wall,searched, distance} = node;
                                 return (
                                 <Node 
-                                    key={node_idx}
+                                    key={node_idx + 'hello' + reset_id}
                                     row={row}
                                     col={col}
                                     is_start = {is_start}
                                     is_finish = {is_finish}
                                     is_wall = {is_wall}
                                     searched = {searched}
+                                    distance = {distance}
                                     onMouseDown={(row, col) => this.handleMouseDown(row, col)}
                                     onMouseEnter={(row, col) => this.handleMouseEnter(row, col)}
                                     onMouseUp={(row,col) => this.handleMouseUp(row,col)}
@@ -102,26 +112,44 @@ export default class Visualizer extends React.Component {
     will start up a certain pathfinding algorithm based on dropdown selection, but has not been implemented yet
     */
     pathfind() {
+        this.setState({pathfinding: true})
         const {nodes} = this.state;
         const start = nodes[START_ROW][START_COL];
         const end = nodes[FINISH_ROW][FINISH_COL];
-        const visited = a_star(nodes,start,end);
-        this.animate_visited(visited);
-        console.log(nodes);
-        const path = this.get_shortest_path();
-        console.log(path);
-        this.animate_shortest_path(path);
-    }
-    animate_visited(visited) {
 
+        const visited = a_star(nodes,start,end);
+        const path = this.get_shortest_path();
+
+        this.animate_algorithm(visited, path);
+    }
+    animate_algorithm(visited,path){
+        visited.shift();
+        for (let i = 0; i < visited.length; i++) {
+            if (i === visited.length-1){
+                setTimeout(() => {
+                    this.animate_shortest_path(path)
+                }, 8*i)
+                return;
+            }
+            const node = visited[i];
+            setTimeout(() => { document.getElementById(`node ${node.row} ${node.col}`).className = 'node node-searched' }, 8 * i);
+        }
     }
     animate_shortest_path(path) {
-
+        for(let i = 0;i<=path.length;i++){
+            
+            if(i === path.length){
+                setTimeout(() => this.setState({pathfinding: false}), 20 * i)
+                return;
+            }
+            const node = path[i];
+            setTimeout(() => document.getElementById(`node ${node.row} ${node.col}`).className = 'node node-shortest-path', 20 * i)
+        }
     }
     get_shortest_path = () => {
         const {nodes} = this.state;
         const res = [];
-        var last = nodes[FINISH_ROW][FINISH_COL];
+        var last = nodes[FINISH_ROW][FINISH_COL].previous;
         while (last.previous !== null) {
             res.unshift(last);
             last = last.previous;
@@ -152,9 +180,8 @@ const initiate_nodes = () => {
 }
 
 const new_wall = (grid,row,col) => {
-    console.log(grid);
     const res = grid.slice();
     const node = res[row][col];
-    res[row][col] = {...node,is_wall: !node.is_wall};
+    res[row][col] = {...node,searched: false,is_wall: !node.is_wall};
     return res;
 }

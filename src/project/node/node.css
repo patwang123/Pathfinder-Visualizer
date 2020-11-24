@@ -2,10 +2,10 @@
     width: 25px;
     height: 25px;
     outline: 1px solid black;
+    background-color: white;
     display: inline-block;
     cursor: pointer;
 }
-
 .node-start {
     cursor: no-drop;
     transform: scale(1);
@@ -22,7 +22,7 @@
 }
 .node-shortest-path {
     transform: scale(1);
-    background-color: rgba(100,100,100);
+    background-color: rgb(200, 255, 0);
 }
 .node-searched {
     animation-timing-function: ease-out;

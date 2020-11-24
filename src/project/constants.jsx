@@ -11,6 +11,6 @@ export const new_node = {
     is_finish: false,
     is_wall: false,
     searched: false,
-    dist: Infinity,
+    distance: Infinity,
     previous: null
 }
