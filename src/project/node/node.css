@@ -1,17 +1,27 @@
 .node {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     outline: 1px solid black;
-    display: inline-block
+    display: inline-block;
+    cursor: pointer;
 }
 
 .node-start {
+    cursor: no-drop;
+    transform: scale(1);
     background-color: rgba(0,255,0);
 }
 .node-finish {
+    cursor: no-drop;
+    transform: scale(1);
     background-color: rgba(0,0,255);
 }
+.node-wall {
+    transform: scale(1);
+    background-color: rgba(100,100,100);
+}
 .node-shortest-path {
+    transform: scale(1);
     background-color: rgba(100,100,100);
 }
 .node-searched {
