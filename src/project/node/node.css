@@ -1,7 +1,7 @@
 .node {
     width: 25px;
     height: 25px;
-    outline: 1px solid black;
+    outline: 1px solid rgba(175,175,175);
     background-color: white;
     display: inline-block;
     cursor: pointer;
@@ -42,7 +42,7 @@
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
     animation-name: searching;
-    animation-duration: 2s;
+    animation-duration: 1.7s;
     animation-delay: 0;
 
 }

@@ -95,12 +95,13 @@ export default class Visualizer extends React.Component {
                         )
                     })}
                 </select>
-                <div className='grid' key={reset_id}>
+                <table className='grid' key={reset_id}>
                     {nodes.map((row,row_idx) => {
-                        return <div key={row_idx}>
+                        return <tr key={row_idx}>
                             {row.map((node,node_idx) => {
                                 const {row,col,is_start,is_finish,is_wall,searched, distance} = node;
                                 return (
+                                <td>
                                 <Node 
                                     key={node_idx + 'hello' + reset_id}
                                     row={row}
@@ -114,13 +115,14 @@ export default class Visualizer extends React.Component {
                                     onMouseOver={(row, col) => this.handleMouseOver(row, col)}
                                     onMouseUp={(row,col) => this.handleMouseUp(row,col)}
                                     >
-                                </Node>)
+                                </Node>
+                                </td>)
                                 })
                             }
-                        </div>
+                        </tr>
 
                     })}
-                </div>
+                </table>
             </div>
         )
     }
