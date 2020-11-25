@@ -6,7 +6,7 @@ It's a work in progress, but feel free to check out how it's going at https://pa
 
 # Status
 
-As of now, the general interface has been implemented (selecting walls, start node, end node), but the algorithms have not been implemented yet.
+As of now, the implementation of it has been finished. This is a pathfinding visualizer with little features.
 
 # CREDITS
 
