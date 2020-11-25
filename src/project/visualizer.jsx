@@ -77,7 +77,7 @@ export default class Visualizer extends React.Component {
             return
         }
         const nodes = initiate_nodes()
-        this.setState({nodes: nodes,reset_id: reset_id+1});
+        this.setState({nodes: nodes,reset_id: reset_id+1,dirty: false});
     }
     render() {
         const {nodes,reset_id} = this.state
