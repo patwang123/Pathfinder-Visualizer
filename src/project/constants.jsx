@@ -18,6 +18,6 @@ export const new_node = {
     previous: null
 }
 export const ALGOS = {
-    0: a_star,
-    1: djikstras,
+    0: [a_star,'A*'],
+    1: [djikstras,'Djikstra\'s'],
 }

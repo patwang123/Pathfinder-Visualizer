@@ -5,8 +5,11 @@ import './visualizer.css';
 
 import Node from './node/node.jsx';
 
+/*
+handled by constants ALGO
 import a_star from './algorithms/Astar.jsx';
 import djikstras from './algorithms/Djikstras.jsx';
+*/
 
 import {ROWS, COLS,
         START_ROW,START_COL,
@@ -77,7 +80,7 @@ export default class Visualizer extends React.Component {
     render() {
         const {nodes,reset_id} = this.state
         return (
-            <div>
+            <div key={reset_id + 'd'}>
                 <button onClick={ () => this.pathfind()}>Start it up!</button>
                 <br/>
                 <button onClick = { () => this.reset()}>Reset the board</button>
@@ -87,13 +90,12 @@ export default class Visualizer extends React.Component {
                     {/*<option value={0} defaultValue>A* Search</option>
                     <option value={1}>Djikstra's</option>*/}
                     {Object.entries(ALGOS).map(([k,v]) => {
-                        console.log(v);
                         return (
-                            <option value={k}>{v.name}</option>
+                            <option value={k} key={k}>{v[1]}</option>
                         )
                     })}
                 </select>
-                <div className='grid'>
+                <div className='grid' key={reset_id}>
                     {nodes.map((row,row_idx) => {
                         return <div key={row_idx}>
                             {row.map((node,node_idx) => {
@@ -127,14 +129,12 @@ export default class Visualizer extends React.Component {
     will start up a certain pathfinding algorithm based on dropdown selection, but has not been implemented yet
     */
     pathfind() {
-        const dict = {0: a_star, 1:djikstras}
         this.setState({pathfinding: true})
         const {nodes} = this.state;
         const start = nodes[START_ROW][START_COL];
         const end = nodes[FINISH_ROW][FINISH_COL];
 
-        const algo = dict[document.getElementById('algorithm').value];
-        console.log(algo);
+        const algo = ALGOS[document.getElementById('algorithm').value][0];
         const visited = algo(nodes,start,end);
         const path = this.get_shortest_path();
 
