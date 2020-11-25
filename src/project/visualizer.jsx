@@ -47,12 +47,13 @@ export default class Visualizer extends React.Component {
             nodes: initiate_nodes(),
             mouse_press: false,
             reset_id: 0,
-            pathfinding: false
+            pathfinding: false,
+            dirty: false
         }
     }
     componentDidMount() {
         const nodes = initiate_nodes();
-        this.setState({nodes: nodes, mouse_press: false,count: 0})
+        this.setState({nodes: nodes, mouse_press: false})
     }
     /*
     Handles to toggle mouse press for selecting wall tiles
@@ -75,20 +76,19 @@ export default class Visualizer extends React.Component {
             /*do stuff*/
             return
         }
-        this.setState({nodes: initiate_nodes(),reset_id: reset_id+1});
+        const nodes = initiate_nodes()
+        this.setState({nodes: nodes,reset_id: reset_id+1});
     }
     render() {
         const {nodes,reset_id} = this.state
         return (
-            <div key={reset_id + 'd'}>
+            <div key={reset_id}>
                 <button onClick={ () => this.pathfind()}>Start it up!</button>
                 <br/>
                 <button onClick = { () => this.reset()}>Reset the board</button>
                 <br/>
                 Algorithm:&nbsp;&nbsp;
                 <select name="algorithm" id="algorithm">
-                    {/*<option value={0} defaultValue>A* Search</option>
-                    <option value={1}>Djikstra's</option>*/}
                     {Object.entries(ALGOS).map(([k,v]) => {
                         return (
                             <option value={k} key={k}>{v[1]}</option>
@@ -129,16 +129,21 @@ export default class Visualizer extends React.Component {
     will start up a certain pathfinding algorithm based on dropdown selection, but has not been implemented yet
     */
     pathfind() {
-        this.setState({pathfinding: true})
+        if(this.state.dirty || this.state.pathfinding){
+            this.reset()
+            this.setState({dirty: false})
+        }
+        else{
+        this.setState({pathfinding: true, dirty: true})
         const {nodes} = this.state;
         const start = nodes[START_ROW][START_COL];
         const end = nodes[FINISH_ROW][FINISH_COL];
-
+        
         const algo = ALGOS[document.getElementById('algorithm').value][0];
         const visited = algo(nodes,start,end);
         const path = this.get_shortest_path();
 
-        this.animate_algorithm(visited, path);
+        this.animate_algorithm(visited, path);}
     }
     animate_algorithm(visited,path){
         visited.shift();
@@ -181,7 +186,7 @@ const initiate_nodes = () => {
     for (let i = 0; i < ROWS; i++) {
         const row = [];
         for (let j = 0; j < COLS; j++) {
-            const node = {...new_node,row:i,col:j};
+            const node = { ...new_node, row: i, col: j }
             row.push(node);
         }
         nodes.push(row);

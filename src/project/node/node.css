@@ -6,6 +6,7 @@
     display: inline-block;
     cursor: pointer;
     float:left;
+    user-select: none;
 }
 .node-start {
     cursor: no-drop;

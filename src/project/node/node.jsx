@@ -11,7 +11,7 @@ export default class Node extends React.Component {
             is_wall,
             onMouseDown,
             onMouseOver,
-            onMouseUp
+            onMouseUp,
             } = this.props;
         const class_name = is_start ? 'node-start' :
                             is_finish ? 'node-finish' :
