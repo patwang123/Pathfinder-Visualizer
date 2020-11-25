@@ -1,3 +1,6 @@
+import a_star from "./algorithms/Astar";
+import djikstras from "./algorithms/Djikstras";
+
 export const ROWS = 21;
 export const COLS = 50;
 export const START_ROW = Math.floor(ROWS / 2);
@@ -13,4 +16,8 @@ export const new_node = {
     searched: false,
     distance: Infinity,
     previous: null
+}
+export const ALGOS = {
+    0: a_star,
+    1: djikstras,
 }

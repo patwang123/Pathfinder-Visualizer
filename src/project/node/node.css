@@ -5,24 +5,37 @@
     background-color: white;
     display: inline-block;
     cursor: pointer;
+    float:left;
 }
 .node-start {
     cursor: no-drop;
-    transform: scale(1);
-    background-color: rgba(0,255,0);
+    background-color: rgba(200, 255, 0);
 }
 .node-finish {
     cursor: no-drop;
-    transform: scale(1);
     background-color: rgba(0,0,255);
 }
 .node-wall {
-    transform: scale(1);
     background-color: rgba(100,100,100);
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+    animation-name: walling;
+    animation-duration: 0.5s;
+    animation-delay: 0;
+}
+@keyframes walling {
+    0% {
+        transform: scale(0.3);
+    }
+    50% {
+
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 .node-shortest-path {
-    transform: scale(1);
-    background-color: rgb(200, 255, 0);
+    background-color: rgb(0,255,0);
 }
 .node-searched {
     animation-timing-function: ease-out;

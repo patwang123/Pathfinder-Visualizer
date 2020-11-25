@@ -1,12 +1,16 @@
 /* eslint-disable no-extend-native */
 import React from 'react';
+
 import './visualizer.css';
+
 import Node from './node/node.jsx';
+
 import a_star from './algorithms/Astar.jsx';
 import djikstras from './algorithms/Djikstras.jsx';
+
 import {ROWS, COLS,
         START_ROW,START_COL,
-        FINISH_ROW,FINISH_COL,new_node}
+        FINISH_ROW,FINISH_COL,new_node,ALGOS}
         from './constants.jsx';
 /* ME TRYING TO FIGURE OUT HOW TO MAKE A DROPDOWN MENU
 class Dropdown extends React.Component {
@@ -33,7 +37,6 @@ class Dropdown extends React.Component {
     }
 }*/
 
-
 export default class Visualizer extends React.Component {
     constructor(props){
         super(props)
@@ -57,7 +60,7 @@ export default class Visualizer extends React.Component {
     handleMouseUp(row,col) {
         this.setState({mouse_press: false})
     }
-    handleMouseEnter(row,col) {
+    handleMouseOver(row,col) {
         if (this.state.mouse_press) {
             this.setState({nodes: new_wall(this.state.nodes,row,col)})
         }
@@ -78,6 +81,18 @@ export default class Visualizer extends React.Component {
                 <button onClick={ () => this.pathfind()}>Start it up!</button>
                 <br/>
                 <button onClick = { () => this.reset()}>Reset the board</button>
+                <br/>
+                Algorithm:&nbsp;&nbsp;
+                <select name="algorithm" id="algorithm">
+                    {/*<option value={0} defaultValue>A* Search</option>
+                    <option value={1}>Djikstra's</option>*/}
+                    {Object.entries(ALGOS).map(([k,v]) => {
+                        console.log(v);
+                        return (
+                            <option value={k}>{v.name}</option>
+                        )
+                    })}
+                </select>
                 <div className='grid'>
                     {nodes.map((row,row_idx) => {
                         return <div key={row_idx}>
@@ -94,7 +109,7 @@ export default class Visualizer extends React.Component {
                                     searched = {searched}
                                     distance = {distance}
                                     onMouseDown={(row, col) => this.handleMouseDown(row, col)}
-                                    onMouseEnter={(row, col) => this.handleMouseEnter(row, col)}
+                                    onMouseOver={(row, col) => this.handleMouseOver(row, col)}
                                     onMouseUp={(row,col) => this.handleMouseUp(row,col)}
                                     >
                                 </Node>)
@@ -112,12 +127,15 @@ export default class Visualizer extends React.Component {
     will start up a certain pathfinding algorithm based on dropdown selection, but has not been implemented yet
     */
     pathfind() {
+        const dict = {0: a_star, 1:djikstras}
         this.setState({pathfinding: true})
         const {nodes} = this.state;
         const start = nodes[START_ROW][START_COL];
         const end = nodes[FINISH_ROW][FINISH_COL];
 
-        const visited = a_star(nodes,start,end);
+        const algo = dict[document.getElementById('algorithm').value];
+        console.log(algo);
+        const visited = algo(nodes,start,end);
         const path = this.get_shortest_path();
 
         this.animate_algorithm(visited, path);

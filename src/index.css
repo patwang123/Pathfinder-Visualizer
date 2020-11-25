@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(255, 255, 255);
 }
 
 code {
@@ -15,4 +16,17 @@ code {
 table {
   border: 1px solid black;
   
+}
+h1 {
+  font-size: 50px;
+}
+h2 {
+  font-size: 18px;
+}
+h1,h2 {
+  width: 50%;
+  height: 60px;
+  margin: 0;
+  padding: 0;
+  display: inline;
 }
