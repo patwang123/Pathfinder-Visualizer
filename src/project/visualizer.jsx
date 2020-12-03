@@ -83,6 +83,9 @@ export default class Visualizer extends React.Component {
         const {nodes,reset_id} = this.state
         return (
             <div key={reset_id}>
+                <p>
+                    Drag and click on the grid to make walls (may be a bit buggy). Also, A* heuristic is manhattan distance.
+                </p>
                 <button onClick={ () => this.pathfind()}>Start it up!</button>
                 <br/>
                 <button onClick = { () => this.reset()}>Reset the board</button>
